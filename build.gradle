@@ -1,0 +1,40 @@
+import sun.jvmstat.monitor.MonitoredVmUtil
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.20'
+}
+
+group 'com.raytool'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.20"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+task createJar(type: Jar) {
+    group = "build"
+    manifest {
+        attributes 'Main-Class': 'com.raytool.main.MainKt'
+    }
+    baseName = project.name
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    def file = file('tool')
+    fileMode = 755
+    destinationDir = file
+    with jar
+}
