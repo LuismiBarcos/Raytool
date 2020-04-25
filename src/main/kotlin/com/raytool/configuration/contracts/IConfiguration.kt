@@ -15,6 +15,6 @@ interface IConfiguration{
 
     fun createConfigurationFile(configurationInfo: ConfigurationInfo)
 
-    fun exitsPath()
+    fun exitsPath(path: String): Boolean
 
 }

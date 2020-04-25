@@ -11,6 +11,6 @@ data class ConfigurationInfo(
 
 data class Bundle(
     val path: String,
-    val port: Number,
-    val sessionTime: Number
+    val port: Number = 8080,
+    val sessionTime: Number = 200
 )

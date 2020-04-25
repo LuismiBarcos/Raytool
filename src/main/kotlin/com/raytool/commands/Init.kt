@@ -1,7 +1,10 @@
 package com.raytool.commands
 
+import com.raytool.configuration.Bundle
+import com.raytool.configuration.ConfigurationInfo
 import com.raytool.configuration.business.Configuration
 import com.raytool.configuration.contracts.IConfiguration
+import com.raytool.utils.EMPTY
 
 /**
  *@author Luis Miguel Barcos
@@ -12,13 +15,30 @@ class Init (private val initCommand: Command.Init, private val configuration: IC
     fun execute() {
         print("Todo: execute the following command if it's possible\nraytool ")
         initCommand.arguments.forEach { print("$it ") }
-
         initForm()
-
     }
 
     private fun initForm() {
-        println("Please, enter your Liferay Portal CE path")
-
+        val portalCEPath = askForAPath("Please, enter your Liferay Portal CE path")
+        val liferayBundlePath = askForAPath("Please, enter your Liferay Home path (the bundle)")
+        println("Setting default values. In future will be available to change the default settings with this command")
+        val configurationInfo =
+            ConfigurationInfo(
+                portalCEPath,
+                Bundle(liferayBundlePath)
+            )
+        configuration.createConfigurationFile(configurationInfo)
     }
+
+    private tailrec fun askForAPath(messageToShow: String, path: String = ""): String {
+        return when(configuration.exitsPath(path)) {
+            true -> path
+            false -> {
+                println(messageToShow)
+                return askForAPath("Wrong path. Please, enter again", getInputFromConsole())
+            }
+        }
+    }
+
+    private fun getInputFromConsole(): String = readLine() ?: String.EMPTY
 }
