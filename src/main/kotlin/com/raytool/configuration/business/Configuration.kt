@@ -1,11 +1,12 @@
 package com.raytool.configuration.business
 
+import com.google.gson.GsonBuilder
 import com.raytool.configuration.ConfigurationInfo
 import com.raytool.configuration.contracts.IConfiguration
-import com.raytool.utils.CONFIGURATION_FOLDER_NAME
+import com.raytool.utils.CONFIGURATION_FILE_NAME
 import com.raytool.utils.CONFIGURATION_FOLDER_PATH
-import com.raytool.utils.ROOT_FOLDER
 import java.io.File
+import java.io.FileWriter
 import java.nio.file.FileSystems
 import java.nio.file.Files
 
@@ -25,23 +26,34 @@ class Configuration : IConfiguration {
     override fun createConfigurationFolder(): Boolean =
         File(String.CONFIGURATION_FOLDER_PATH).mkdir()
 
+    override fun exitsPath(path: String): Boolean =
+        path.isNotEmpty() && Files.exists(FileSystems.getDefault().getPath(path))
+
     override fun createConfigurationFile(configurationInfo: ConfigurationInfo) =
         when(exitsConfigurationFolder()){
-            true -> createConfigurationJson()
+            true -> createConfigurationJson(configurationInfo)
             false -> {
                 if (createConfigurationFolder()) {
-                    createConfigurationJson()
+                    createConfigurationJson(configurationInfo)
                 } else {
                     println("Folder not created properly")
                 }
             }
         }
 
-    override fun exitsPath(path: String): Boolean {
-        return path.isNotEmpty() && Files.exists(FileSystems.getDefault().getPath(path))
+    private fun createConfigurationJson(configurationInfo: ConfigurationInfo) {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val jsonConfigurationInfo = gson.toJson(configurationInfo)
+        writeInFile(
+            jsonConfigurationInfo,
+            String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME
+        )
     }
 
-    private fun createConfigurationJson() {
-        println("Creating JSON")
+    private fun writeInFile(text: String, path: String) {
+        val fileWriter = FileWriter(path)
+        fileWriter.write(text)
+        fileWriter.flush()
+        fileWriter.close()
     }
 }
