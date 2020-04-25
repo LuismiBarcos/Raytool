@@ -1,5 +1,7 @@
 package com.raytool.utils
 
+import java.io.File
+
 /**
  *@author Luis Miguel Barcos
  */
@@ -10,6 +12,14 @@ package com.raytool.utils
 val String.Companion.EMPTY: String
     get() = ""
 
+val String.Companion.ROOT_FOLDER: String
+    get() = System.getProperty("user.home")
+
+val String.Companion.CONFIGURATION_FOLDER_NAME: String
+    get() = ".raytool"
+
+val String.Companion.CONFIGURATION_FOLDER_PATH: String
+    get() = "${String.ROOT_FOLDER}${File.separator}${String.CONFIGURATION_FOLDER_NAME}"
 /**
  * FUNCTIONS
  */

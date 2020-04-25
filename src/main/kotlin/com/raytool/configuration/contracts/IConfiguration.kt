@@ -9,9 +9,9 @@ import com.raytool.configuration.ConfigurationInfo
 interface IConfiguration{
     fun create()
 
-    fun exitsConfigurationFolder()
+    fun exitsConfigurationFolder(): Boolean
 
-    fun createConfigurationFolder()
+    fun createConfigurationFolder(): Boolean
 
     fun createConfigurationFile(configurationInfo: ConfigurationInfo)
 
