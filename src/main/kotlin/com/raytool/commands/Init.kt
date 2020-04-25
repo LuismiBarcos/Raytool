@@ -13,8 +13,6 @@ import com.raytool.utils.EMPTY
 class Init (private val initCommand: Command.Init, private val configuration: IConfiguration = Configuration()) {
 
     fun execute() {
-        print("Todo: execute the following command if it's possible\nraytool ")
-        initCommand.arguments.forEach { print("$it ") }
         initForm()
     }
 
