@@ -1,11 +1,13 @@
 package com.raytool.configuration.business
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.raytool.configuration.ConfigurationInfo
 import com.raytool.configuration.contracts.IConfiguration
 import com.raytool.utils.CONFIGURATION_FILE_NAME
 import com.raytool.utils.CONFIGURATION_FOLDER_PATH
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileWriter
 import java.nio.file.FileSystems
 import java.nio.file.Files
@@ -41,6 +43,19 @@ class Configuration : IConfiguration {
             }
         }
 
+    override fun getConfigurationInfo(): ConfigurationInfo {
+        if(exitsConfiguration()) {
+            val configurationInfoJson =
+                File(
+                    String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME
+                ).readText()
+            val gson = Gson()
+            return gson.fromJson(configurationInfoJson, ConfigurationInfo::class.java)
+        } else {
+            throw FileNotFoundException()
+        }
+    }
+
     private fun createConfigurationJson(configurationInfo: ConfigurationInfo) {
         val gson = GsonBuilder().setPrettyPrinting().create()
         val jsonConfigurationInfo = gson.toJson(configurationInfo)
@@ -56,4 +71,7 @@ class Configuration : IConfiguration {
         fileWriter.flush()
         fileWriter.close()
     }
+
+    private fun exitsConfiguration(): Boolean =
+        File(String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME).exists()
 }

@@ -6,7 +6,6 @@ import com.raytool.commands.*
  *@author Luis Miguel Barcos
  */
 
-const val portalCEPath = "/Users/luismiguelbarco/Desktop/Luismi/forks/liferay-portal/liferay-portal"
 const val test = "/Users/luismiguelbarco/Desktop/borrar"
 
 fun main(args: Array<String>) {

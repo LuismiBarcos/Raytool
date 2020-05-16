@@ -17,4 +17,6 @@ interface IConfiguration{
 
     fun exitsPath(path: String): Boolean
 
+    fun getConfigurationInfo(): ConfigurationInfo
+
 }
