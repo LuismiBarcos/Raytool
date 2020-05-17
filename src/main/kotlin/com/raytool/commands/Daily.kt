@@ -29,33 +29,15 @@ class Daily(private val dailyCommand: Command.Daily, private val configuration: 
         }
     }
 
-    private fun checkoutMasterBranch(configurationInfo: ConfigurationInfo){
-        executor(File(configurationInfo.liferayPortalCEPath),"git", "checkout", "master")
-    }
+    private fun checkoutMasterBranch(configurationInfo: ConfigurationInfo) =
+        dailyCommand.execute(File(configurationInfo.liferayPortalCEPath),"git", "checkout", "master")
 
-    private fun pullLastChanges(configurationInfo: ConfigurationInfo) {
-        executor(File(configurationInfo.liferayPortalCEPath),
+
+    private fun pullLastChanges(configurationInfo: ConfigurationInfo) =
+        dailyCommand.execute(
+            File(configurationInfo.liferayPortalCEPath),
             "git", "pull", "--ff-only", "upstream", "master")
-    }
 
-    private fun runAntAll(configurationInfo: ConfigurationInfo) {
-        executor(File(configurationInfo.liferayPortalCEPath),"ant", "all")
-    }
-
-    private fun executor(directory: File, vararg command: String) {
-        val processBuilder = ProcessBuilder()
-            .command(command.toList())
-            .directory(directory)
-        val process = processBuilder.start()
-        process.inputStream.reader(Charsets.UTF_8).use {
-            print(it.readText())
-        }
-        process.errorStream.reader(Charsets.UTF_8).use {
-            print(it.readText())
-        }
-        process.waitFor()
-        print("Command: ")
-        command.forEach { print("$it ") }
-        println("COMPLETED")
-    }
+    private fun runAntAll(configurationInfo: ConfigurationInfo) =
+        dailyCommand.execute(File(configurationInfo.liferayPortalCEPath),"ant", "all")
 }
