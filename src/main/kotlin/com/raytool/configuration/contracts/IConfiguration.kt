@@ -7,15 +7,12 @@ import com.raytool.configuration.ConfigurationInfo
  */
 
 interface IConfiguration{
-    fun create()
+
+    fun exitsPath(path: String): Boolean
 
     fun exitsConfigurationFolder(): Boolean
 
-    fun createConfigurationFolder(): Boolean
-
     fun createConfigurationFile(configurationInfo: ConfigurationInfo)
-
-    fun exitsPath(path: String): Boolean
 
     fun getConfigurationInfo(): ConfigurationInfo
 

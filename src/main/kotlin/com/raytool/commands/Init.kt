@@ -19,13 +19,10 @@ class Init (private val initCommand: Command.Init, private val configuration: IC
     private fun initForm() {
         val portalCEPath = askForAPath("Please, enter your Liferay Portal CE path")
         val liferayBundlePath = askForAPath("Please, enter your Liferay Home path (the bundle)")
-        println("Setting default values. In future will be available to change the default settings with this command")
-        val configurationInfo =
-            ConfigurationInfo(
-                portalCEPath,
-                Bundle(liferayBundlePath)
-            )
+        println("Setting default values")
+        val configurationInfo = ConfigurationInfo( portalCEPath, Bundle(liferayBundlePath))
         configuration.createConfigurationFile(configurationInfo)
+        println("Default values saved. For change the default values re-run this command")
     }
 
     private tailrec fun askForAPath(messageToShow: String, path: String = ""): String {

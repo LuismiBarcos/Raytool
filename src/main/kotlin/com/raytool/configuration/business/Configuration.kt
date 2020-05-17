@@ -18,16 +18,6 @@ import java.nio.file.Files
 
 class Configuration : IConfiguration {
 
-    override fun create() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun exitsConfigurationFolder(): Boolean =
-        exitsPath(String.CONFIGURATION_FOLDER_PATH)
-
-    override fun createConfigurationFolder(): Boolean =
-        File(String.CONFIGURATION_FOLDER_PATH).mkdir()
-
     override fun exitsPath(path: String): Boolean =
         path.isNotEmpty() && Files.exists(FileSystems.getDefault().getPath(path))
 
@@ -42,6 +32,9 @@ class Configuration : IConfiguration {
                 }
             }
         }
+
+    override fun exitsConfigurationFolder(): Boolean =
+        exitsPath(String.CONFIGURATION_FOLDER_PATH)
 
     override fun getConfigurationInfo(): ConfigurationInfo {
         if(exitsConfiguration()) {
@@ -74,4 +67,7 @@ class Configuration : IConfiguration {
 
     private fun exitsConfiguration(): Boolean =
         File(String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME).exists()
+
+    private fun createConfigurationFolder(): Boolean =
+        File(String.CONFIGURATION_FOLDER_PATH).mkdir()
 }
