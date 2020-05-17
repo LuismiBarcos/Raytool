@@ -23,6 +23,7 @@ class Daily(private val dailyCommand: Command.Daily, private val configuration: 
             val configurationInfo = configuration.getConfigurationInfo()
             checkoutMasterBranch(configurationInfo)
             pullLastChanges(configurationInfo)
+            pushChangesToMaster(configurationInfo)
             runAntAll(configurationInfo)
         } catch (ex: FileNotFoundException) {
             println("Configuration not found.\nPlease, run raytool init")
@@ -32,11 +33,13 @@ class Daily(private val dailyCommand: Command.Daily, private val configuration: 
     private fun checkoutMasterBranch(configurationInfo: ConfigurationInfo) =
         dailyCommand.execute(File(configurationInfo.liferayPortalCEPath),"git", "checkout", "master")
 
-
     private fun pullLastChanges(configurationInfo: ConfigurationInfo) =
         dailyCommand.execute(
             File(configurationInfo.liferayPortalCEPath),
             "git", "pull", "--ff-only", "upstream", "master")
+
+    private fun pushChangesToMaster(configurationInfo: ConfigurationInfo) =
+        dailyCommand.execute(File(configurationInfo.liferayPortalCEPath), "git", "push", "origin", "master")
 
     private fun runAntAll(configurationInfo: ConfigurationInfo) =
         dailyCommand.execute(File(configurationInfo.liferayPortalCEPath),"ant", "all")
