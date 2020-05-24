@@ -12,5 +12,5 @@ interface IShellExecutor {
      * @param command List of string which contains the command to execute
      * @return Value of the exit code produced when execute the command
      */
-    fun execute(directory: File, vararg command: String)
+    fun execute(directory: File, command: List<String>)
 }

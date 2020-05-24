@@ -10,9 +10,9 @@ import kotlin.system.exitProcess
  */
 
 open class ShellExecutor : IShellExecutor {
-    override fun execute(directory: File, vararg command: String) {
+    override fun execute(directory: File, command: List<String>) {
         val executionProcess = ProcessBuilder()
-            .command(command.toList())
+            .command(command)
             .directory(directory)
             .start()
         val normalExecutionMessages = Thread { showCommandMessages(executionProcess.inputStream) }
@@ -30,7 +30,7 @@ open class ShellExecutor : IShellExecutor {
         stream.reader(Charsets.UTF_8).use { it.forEachLine { line -> println(line) } }
     }
 
-    private fun showMessageCompleted(processExit: Int, command: Array<out String>) {
+    private fun showMessageCompleted(processExit: Int, command: List<String>) {
         print("Command: ")
         command.forEach { print("$it ") }
         println("COMPLETED. Returned with $processExit code\n")
