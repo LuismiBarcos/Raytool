@@ -2,10 +2,9 @@ package com.raytool.configuration.business
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.raytool.configuration.ConfigurationInfo
+import com.raytool.configuration.contracts.ConfigurationFolderConstants
+import com.raytool.configuration.contracts.ConfigurationInfo
 import com.raytool.configuration.contracts.IConfiguration
-import com.raytool.utils.CONFIGURATION_FILE_NAME
-import com.raytool.utils.CONFIGURATION_FOLDER_PATH
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileWriter
@@ -16,7 +15,9 @@ import java.nio.file.Files
  *@author Luis Miguel Barcos
  */
 
-class Configuration : IConfiguration {
+class Configuration(
+    private val folderConstants: ConfigurationFolderConstants = ConfigurationFolderConstants()
+) : IConfiguration {
 
     override fun exitsPath(path: String): Boolean =
         path.isNotEmpty() && Files.exists(FileSystems.getDefault().getPath(path))
@@ -34,13 +35,13 @@ class Configuration : IConfiguration {
         }
 
     override fun exitsConfigurationFolder(): Boolean =
-        exitsPath(String.CONFIGURATION_FOLDER_PATH)
+        exitsPath(folderConstants.CONFIGURATION_FOLDER_PATH)
 
     override fun getConfigurationInfo(): ConfigurationInfo {
         if(exitsConfiguration()) {
             val configurationInfoJson =
                 File(
-                    String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME
+                    folderConstants.CONFIGURATION_FOLDER_PATH + File.separator + folderConstants.CONFIGURATION_FILE_NAME
                 ).readText()
             val gson = Gson()
             return gson.fromJson(configurationInfoJson, ConfigurationInfo::class.java)
@@ -54,7 +55,7 @@ class Configuration : IConfiguration {
         val jsonConfigurationInfo = gson.toJson(configurationInfo)
         writeInFile(
             jsonConfigurationInfo,
-            String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME
+            folderConstants.CONFIGURATION_FOLDER_PATH + File.separator + folderConstants.CONFIGURATION_FILE_NAME
         )
     }
 
@@ -66,8 +67,9 @@ class Configuration : IConfiguration {
     }
 
     private fun exitsConfiguration(): Boolean =
-        File(String.CONFIGURATION_FOLDER_PATH + File.separator + String.CONFIGURATION_FILE_NAME).exists()
+        File(folderConstants.CONFIGURATION_FOLDER_PATH + File.separator + folderConstants.CONFIGURATION_FILE_NAME)
+        .exists()
 
     private fun createConfigurationFolder(): Boolean =
-        File(String.CONFIGURATION_FOLDER_PATH).mkdir()
+        File(folderConstants.CONFIGURATION_FOLDER_PATH).mkdir()
 }

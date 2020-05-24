@@ -1,6 +1,8 @@
 package com.raytool.main
 
-import com.raytool.commands.*
+import com.raytool.commands.business.*
+import com.raytool.commands.contracts.Command
+import com.raytool.commands.contracts.Commands
 
 /**
  *@author Luis Miguel Barcos

@@ -1,7 +1,5 @@
 package com.raytool.configuration.contracts
 
-import com.raytool.configuration.ConfigurationInfo
-
 /**
  *@author Luis Miguel Barcos
  */

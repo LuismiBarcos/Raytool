@@ -1,16 +1,19 @@
-package com.raytool.commands
+package com.raytool.commands.business
 
-import com.raytool.configuration.Bundle
-import com.raytool.configuration.ConfigurationInfo
+import com.raytool.commands.contracts.Command
+import com.raytool.configuration.contracts.Bundle
+import com.raytool.configuration.contracts.ConfigurationInfo
 import com.raytool.configuration.business.Configuration
 import com.raytool.configuration.contracts.IConfiguration
-import com.raytool.utils.EMPTY
 
 /**
  *@author Luis Miguel Barcos
  */
 
-class Init (private val initCommand: Command.Init, private val configuration: IConfiguration = Configuration()) {
+class Init (
+    private val initCommand: Command.Init,
+    private val configuration: IConfiguration = Configuration()
+) {
 
     fun execute() {
         initForm()
@@ -19,8 +22,11 @@ class Init (private val initCommand: Command.Init, private val configuration: IC
     private fun initForm() {
         val portalCEPath = askForAPath("Please, enter your Liferay Portal CE path")
         val liferayBundlePath = askForAPath("Please, enter your Liferay Home path (the bundle)")
+        val configurationInfo = ConfigurationInfo(
+            portalCEPath,
+            Bundle(liferayBundlePath)
+        )
         println("Setting default values")
-        val configurationInfo = ConfigurationInfo( portalCEPath, Bundle(liferayBundlePath))
         configuration.createConfigurationFile(configurationInfo)
         println("Default values saved. For change the default values re-run this command")
     }
@@ -35,5 +41,5 @@ class Init (private val initCommand: Command.Init, private val configuration: IC
         }
     }
 
-    private fun getInputFromConsole(): String = readLine() ?: String.EMPTY
+    private fun getInputFromConsole(): String = readLine() ?: ""
 }

@@ -1,6 +1,7 @@
-package com.raytool.commands
+package com.raytool.commands.business
 
-import com.raytool.configuration.ConfigurationInfo
+import com.raytool.commands.contracts.Command
+import com.raytool.configuration.contracts.ConfigurationInfo
 import com.raytool.configuration.business.Configuration
 import com.raytool.configuration.contracts.IConfiguration
 import java.io.File
@@ -10,7 +11,10 @@ import java.io.FileNotFoundException
  *@author Luis Miguel Barcos
  */
 
-class Daily(private val dailyCommand: Command.Daily, private val configuration: IConfiguration = Configuration()) {
+class Daily(
+    private val dailyCommand: Command.Daily,
+    private val configuration: IConfiguration = Configuration()
+) {
     fun execute() {
         when(configuration.exitsConfigurationFolder()) {
             true -> executeAntAll()
