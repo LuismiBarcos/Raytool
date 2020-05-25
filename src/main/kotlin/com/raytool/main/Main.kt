@@ -14,6 +14,7 @@ fun main(args: Array<String>) {
         is Command.Daily -> Daily(command).execute()
         is Command.Docker -> Docker(command).execute()
         is Command.Change -> Change(command).execute()
+        is Command.Utils -> Utils(command).execute()
         is Command.Help -> Help(command).execute()
     }
 }

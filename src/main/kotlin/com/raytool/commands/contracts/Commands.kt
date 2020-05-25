@@ -11,6 +11,7 @@ sealed class Command : ShellExecutor() {
     data class Daily(val arguments: List<String>) : Command()
     data class Docker(val arguments: List<String>) : Command()
     data class Change(val arguments: List<String>) : Command()
+    data class Utils(val arguments: List<String>) : Command()
     data class Help(val arguments: List<String>) : Command()
 }
 
@@ -19,6 +20,7 @@ enum class Commands(val command: String) {
     DAILY("daily"),
     DOCKER("docker"),
     CHANGE("change"),
+    UTILS("utils"),
     HELP("help");
 
     companion object {
@@ -28,6 +30,7 @@ enum class Commands(val command: String) {
                 DAILY.command -> Command.Daily(arguments)
                 DOCKER.command -> Command.Docker(arguments)
                 CHANGE.command -> Command.Change(arguments)
+                UTILS.command -> Command.Utils(arguments)
                 HELP.command -> Command.Help(arguments)
                 else -> Command.Help(arguments)
             }
