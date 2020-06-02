@@ -18,6 +18,17 @@ object PortalCECommands : ShellCommands() {
     const val ANT_ALL = "ant all"
 }
 
-object MySQLCommands : ShellCommands()
+object MySQLCommands : ShellCommands() {
+    fun getDropDatabaseCommand(databaseName: String, mysqlUsername: String, mysqlPassword: String) : String {
+        val dropDatabaseSQLSyntax = "DROP DATABASE IF EXISTS $databaseName".replace(' ', '&')
+        return "mysql -u $mysqlUsername -p$mysqlPassword -e $dropDatabaseSQLSyntax"
+    }
+
+    fun getCreateDatabaseCommand(databaseName: String, mysqlUsername: String, mysqlPassword: String) : String {
+        val createDatabaseSQLSyntax =
+            "CREATE DATABASE $databaseName CHARACTER SET UTF8mb4 COLLATE utf8mb4_bin".replace(' ', '&')
+        return "mysql -u $mysqlUsername -p$mysqlPassword -e $createDatabaseSQLSyntax"
+    }
+}
 
 object DockerCommands : ShellCommands()

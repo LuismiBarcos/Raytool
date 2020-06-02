@@ -1,6 +1,9 @@
 package com.raytool.commands.business
 
 import com.raytool.commands.contracts.Command
+import com.raytool.commands.contracts.MySQLCommands
+import com.raytool.configuration.business.BundleConfiguration
+import com.raytool.configuration.contracts.IBundleConfiguration
 import com.raytool.extensions.getWordsBySpaces
 import java.io.File
 
@@ -10,31 +13,42 @@ import java.io.File
 
 class Utils(
     private val utilsCommand: Command.Utils,
-    private val shellExecutor: ShellExecutor = ShellExecutor()
+    private val bundleConfiguration: IBundleConfiguration = BundleConfiguration()
 ) {
+
     fun execute() {
         when(utilsCommand.arguments.contains("-db")) {
-            true -> deleteDataBase()
+            true -> recreateDatabase()
             false -> println("No tasks executed")
         }
     }
 
-    private fun deleteDataBase() {
-        val dropDatabaseSQLSyntax =
-            "DROP DATABASE IF EXISTS lportal_master".replace(' ', '&')
-        val createDatabaseSQLSyntax =
-            "CREATE DATABASE lportal_master CHARACTER SET UTF8mb4 COLLATE utf8mb4_bin"
-                .replace(' ', '&')
-        val dropDatabaseCommand =
-            "mysql -u root -proot -e $dropDatabaseSQLSyntax".getWordsBySpaces(useAmpersandAsWhitespace = true)
-        val createDatabaseCommand =
-            "mysql -u root -proot -e $createDatabaseSQLSyntax".getWordsBySpaces(useAmpersandAsWhitespace = true)
+    private fun recreateDatabase() {
+        deleteDatabase()
+        createDatabase()
+    }
 
+    fun deleteDatabase() {
         println("Deleting database")
-        shellExecutor.execute(File(System.getProperty("user.home")), dropDatabaseCommand)
+        val dropDB = MySQLCommands
+            .getDropDatabaseCommand(
+                bundleConfiguration.getDatabaseName(),
+                bundleConfiguration.getDatabaseUsername(),
+                bundleConfiguration.getDatabasePassword())
+            .getWordsBySpaces(useAmpersandAsWhitespace = true)
+        utilsCommand.execute(File(System.getProperty("user.home")), dropDB)
         println("Database deleted")
+    }
+
+    fun createDatabase() {
         println("Creating database")
-        shellExecutor.execute(File(System.getProperty("user.home")), createDatabaseCommand)
+        val createDB = MySQLCommands
+            .getCreateDatabaseCommand(
+                bundleConfiguration.getDatabaseName(),
+                bundleConfiguration.getDatabaseUsername(),
+                bundleConfiguration.getDatabasePassword())
+            .getWordsBySpaces(useAmpersandAsWhitespace = true)
+        utilsCommand.execute(File(System.getProperty("user.home")), createDB)
         println("Database created")
     }
 }
